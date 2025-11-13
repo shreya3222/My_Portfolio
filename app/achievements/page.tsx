@@ -100,7 +100,7 @@ export default function AchievementsPage() {
 const sectionRef = useRef<HTMLDivElement | null>(null);
   const lineRef = useRef(null);
   const orbRef = useRef(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+const [selectedImage, setSelectedImage] = useState<{ src: string; caption: string } | null>(null);
 
 
     const galleryItems = [
