@@ -1,5 +1,4 @@
 'use client';
-// @ts-expect-error temporary: Canvas types missing in @react-three/fiber beta
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, useGLTF } from '@react-three/drei';
 import { Suspense, useEffect, useRef, useState } from 'react';

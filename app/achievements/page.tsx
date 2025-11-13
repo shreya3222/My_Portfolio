@@ -97,7 +97,7 @@ const achievements = [
 
 
 export default function AchievementsPage() {
-  const sectionRef = useRef(null);
+const sectionRef = useRef<HTMLDivElement | null>(null);
   const lineRef = useRef(null);
   const orbRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -138,7 +138,11 @@ export default function AchievementsPage() {
       );
 
       // Fade in/out glowing orb (center indicator)
-      const bentoBoxes = sectionRef.current.querySelectorAll('.bento');
+const container = sectionRef.current as HTMLDivElement | null;
+if (!container) return;
+
+const bentoBoxes = container.querySelectorAll<HTMLDivElement>('.bento');
+
       if (bentoBoxes.length > 1) {
         const first = bentoBoxes[0];
         const last = bentoBoxes[bentoBoxes.length - 1];
