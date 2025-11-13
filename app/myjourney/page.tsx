@@ -1,4 +1,5 @@
 'use client';
+/* @jsxImportSource @react-three/fiber */
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, useGLTF } from '@react-three/drei';
 import { Suspense, useEffect, useRef, useState } from 'react';

@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "types": ["@types/node", "@types/react", "@types/react-dom"],
+    "baseUrl": ".",
     "target": "ES2017",
     "lib": [
       "dom",
