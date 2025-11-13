@@ -22,18 +22,25 @@ function ResponsiveCamera() {
   useEffect(() => {
     const handleResize = () => {
       const { innerWidth: w, innerHeight: h } = window;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+
+      // ✅ Only apply aspect ratio if camera is a PerspectiveCamera
+      if ((camera as THREE.PerspectiveCamera).isPerspectiveCamera) {
+        const persp = camera as THREE.PerspectiveCamera;
+        persp.aspect = w / h;
+        persp.updateProjectionMatrix();
+      }
+
       gl.setSize(w, h);
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // adjust immediately on mount
+    handleResize(); // adjust immediately
     return () => window.removeEventListener("resize", handleResize);
   }, [camera, gl]);
 
   return null;
 }
+
 
 /** Manual raycast catcher — turns clicks into intersects for ship/hitbox */
 function ClickCatcher({
