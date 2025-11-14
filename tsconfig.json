@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,17 +19,26 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-  "next-env.d.ts",
-  "react-three-ambient.d.ts",
-  "**/*.ts",
-  "**/*.tsx"
-],
-"skipLibCheck": true,
-"strict": false,
-  "exclude": ["node_modules"]
+    "next-env.d.ts",
+    "react-three-ambient.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "skipLibCheck": true,
+  "strict": false,
+  "exclude": [
+    "node_modules"
+  ]
 }

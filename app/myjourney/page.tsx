@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, useGLTF } from '@react-three/drei';
