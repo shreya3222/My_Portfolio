@@ -10,9 +10,8 @@ import SocialDock from '../../components/reactbits/SocialDock';
 
 useGLTF.preload('/models/spaceship.glb');
 useGLTF.preload('/models/space_ship_hallway.glb');
-const room = (typeof stage !== "undefined" && (stage === "level4" || stage === "level4Transition"))
-  ? useGLTF('/models/room_draco.glb')
-  : null;
+useGLTF.preload('/models/room_draco.glb');
+
 
 const SHIP_POS: [number, number, number] = [0, -1, 0];
 const FINAL_CAM_POS = new THREE.Vector3(0, 90, 180);
@@ -210,7 +209,7 @@ function InsideScene() {
       <directionalLight position={[4, 8, 2]} intensity={1.5} color="#ffffff" />
       <group>
         <primitive object={hallway.scene} />
-{room && <primitive object={room.scene} />}
+        <primitive object={room.scene} />
       </group>
     </>
   );
@@ -426,16 +425,17 @@ const handleExit = () => {
               <SpaceshipModel groupRef={shipGroupRef} hitboxRef={hitboxRef} />
             </Suspense>
           )}
-{(stage === 'flyin' || stage === 'inside' || stage === 'level3') && (
-  <Suspense fallback={null}>
-    <InsideScene stage={stage} />
-  </Suspense>
-)}
-{(stage === 'level4' || stage === 'level4Transition' || stage === 'terminalPrompt' || stage === 'level5') && (
-  <Suspense fallback={null}>
-    <InsideScene stage={stage} />
-  </Suspense>
-)}
+          {(stage === 'flyin' ||
+            stage === 'inside' ||
+            stage === 'level3' ||
+            stage === 'level4' ||
+            stage === 'level4Transition' ||
+            stage === 'terminalPrompt' ||
+            stage === 'level5') && (
+            <Suspense fallback={null}>
+              <InsideScene />
+            </Suspense>
+          )}
           {(stage === 'intro' || stage === 'level1') && (
             <>
               <ClickCatcher targets={[shipGroupRef, hitboxRef]} onHit={() => setStage('level1')} />
