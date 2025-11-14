@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
