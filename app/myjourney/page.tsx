@@ -8,9 +8,10 @@ import * as THREE from 'three';
 import TerminalInterface from '@/components/reactbits/TerminalInterface';
 import SocialDock from '../../components/reactbits/SocialDock';
 
-function useSafeGLTF(path: string) {
-  return useGLTF(path, true, true); // enable cache + retry-friendly mode
-}
+useGLTF.preload('/models/spaceship.glb');
+useGLTF.preload('/models/space_ship_hallway.glb');
+useGLTF.preload('/models/room_draco.glb');
+
 
 const SHIP_POS: [number, number, number] = [0, -1, 0];
 const FINAL_CAM_POS = new THREE.Vector3(0, 90, 180);
@@ -85,7 +86,7 @@ function SpaceshipModel({
   groupRef: React.MutableRefObject<THREE.Group | null>;
   hitboxRef: React.MutableRefObject<THREE.Mesh | null>;
 }) {
-const { scene } = useSafeGLTF('/models/spaceship.glb');
+  const { scene } = useGLTF('/models/spaceship.glb');
 
   return (
     <Float floatIntensity={1.2} rotationIntensity={0.6} speed={2}>
@@ -169,10 +170,8 @@ function IntroCamera({ duration = 4.0 }: { duration?: number }) {
 }
 
 function InsideScene() {
-const hallway = useSafeGLTF('/models/space_ship_hallway.glb');
-const room = useSafeGLTF('/models/room_draco.glb');
-
- 
+  const hallway = useGLTF('/models/space_ship_hallway.glb');
+  const room = useGLTF('/models/room_draco.glb');
   const { camera, scene } = useThree();
   const hasEnteredRef = useRef(false);
 
