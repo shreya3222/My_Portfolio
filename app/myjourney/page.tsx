@@ -10,8 +10,9 @@ import SocialDock from '../../components/reactbits/SocialDock';
 
 useGLTF.preload('/models/spaceship.glb');
 useGLTF.preload('/models/space_ship_hallway.glb');
-useGLTF.preload('/models/room_draco.glb');
-
+const room = (typeof stage !== "undefined" && (stage === "level4" || stage === "level4Transition"))
+  ? useGLTF('/models/room_draco.glb')
+  : null;
 
 const SHIP_POS: [number, number, number] = [0, -1, 0];
 const FINAL_CAM_POS = new THREE.Vector3(0, 90, 180);
@@ -209,7 +210,7 @@ function InsideScene() {
       <directionalLight position={[4, 8, 2]} intensity={1.5} color="#ffffff" />
       <group>
         <primitive object={hallway.scene} />
-        <primitive object={room.scene} />
+{room && <primitive object={room.scene} />}
       </group>
     </>
   );
@@ -417,41 +418,30 @@ const handleExit = () => {
   camera={{ position: [0, 90, 180], fov: 50 }}
   style={{ touchAction: 'none', pointerEvents: 'auto' }} 
 >
-  <ResponsiveCamera />  {/* ✅ one global resize listener */}
-  {/* Neutral lights for realistic spaceship color */}
+  <ResponsiveCamera /> 
   <ambientLight intensity={0.8} color="#ffffff" />
   <directionalLight position={[5, 10, 5]} intensity={1.8} color="#ffffff" />
-
-
-          {/* Outside scene — visible until we are fully inside */}
           {!(stage === 'inside' || stage === 'level3' || stage === 'level4' || stage === 'terminalPrompt') && (
             <Suspense fallback={null}>
               <SpaceshipModel groupRef={shipGroupRef} hitboxRef={hitboxRef} />
             </Suspense>
           )}
-
-          {/* Inside scene — becomes visible mid-flight and stays on */}
-          {(stage === 'flyin' ||
-            stage === 'inside' ||
-            stage === 'level3' ||
-            stage === 'level4' ||
-            stage === 'level4Transition' ||
-            stage === 'terminalPrompt' ||
-            stage === 'level5') && (
-            <Suspense fallback={null}>
-              <InsideScene />
-            </Suspense>
-          )}
-
-          {/* Intro interactions & camera */}
+{(stage === 'flyin' || stage === 'inside' || stage === 'level3') && (
+  <Suspense fallback={null}>
+    <InsideScene stage={stage} />
+  </Suspense>
+)}
+{(stage === 'level4' || stage === 'level4Transition' || stage === 'terminalPrompt' || stage === 'level5') && (
+  <Suspense fallback={null}>
+    <InsideScene stage={stage} />
+  </Suspense>
+)}
           {(stage === 'intro' || stage === 'level1') && (
             <>
               <ClickCatcher targets={[shipGroupRef, hitboxRef]} onHit={() => setStage('level1')} />
               <IntroCamera duration={2.0} />
             </>
           )}
-
-          {/* Fly-in animation (no user controls here) */}
           {stage === 'flyin' && (
             <FlyInsideCamera
               duration={1.6}
@@ -459,13 +449,9 @@ const handleExit = () => {
               onDone={() => setStage('inside')}
             />
           )}
-
-          {/* Fly to spaceship entrance (for Level 2) */}
           {stage === 'toEntrance' && (
             <FlyToEntranceCamera duration={2.0} onDone={() => setStage('level2')} />
           )}
-
-          {/* Enable controls only after we’re inside */}
           {stage === 'inside' && (
             <OrbitControls
               enablePan={false}
@@ -473,44 +459,36 @@ const handleExit = () => {
               maxDistance={20}
               onChange={(e) => {
                 const distance = e.target.object.position.length();
-                // Trigger Level 3 when zoomed in close enough
                 if (distance < 8 && !zoomedIn) {
                   setZoomedIn(true);
-                  setTimeout(() => setStage('level3'), 800); // cinematic delay
+                  setTimeout(() => setStage('level3'), 800); 
                 }
               }}
             />
           )}
-
           {stage === 'level4' && (
   <FlyToRoomCamera
     duration={3.5}
     onDone={() => {
-      if (stage !== 'level4') setStage('level4');  // ✅ Avoid duplicate re-trigger
+      if (stage !== 'level4') setStage('level4');  
     }}
   />
 )}
-
 {stage === 'level4Transition' && (
   <FlyToRoomCamera
     key="fly-to-terminal"
     duration={3.5}
-    onDone={() => setStage('terminalPrompt')} // ✅ Ensures orb appears
+    onDone={() => setStage('terminalPrompt')} 
   />
 )}
-
-
           {stage === 'terminalPrompt' && (
             <>
-              {/* 🌟 Cyan central light */}
               <pointLight
                 position={[0, 1.4, -18.8]}
                 color="#00ffff"
                 intensity={3.5}
                 distance={8}
               />
-
-              {/* ⚪ Glowing cyan energy orb */}
               <Float floatIntensity={0.5} rotationIntensity={0}>
                 <mesh position={[0, 1.4, -18.8]} onClick={() => setStage('level5')}>
                   <sphereGeometry args={[0.15, 64, 64]} />
@@ -523,8 +501,6 @@ const handleExit = () => {
                     toneMapped={false}
                   />
                 </mesh>
-
-                {/* Soft cyan outer aura */}
                 <mesh position={[0, 1.4, -18.8]}>
                   <sphereGeometry args={[0.4, 64, 64]} />
                   <meshBasicMaterial
@@ -535,12 +511,9 @@ const handleExit = () => {
                   />
                 </mesh>
               </Float>
-
-              {/* ✨ Pulsating cyan light */}
               <PulseLight position={[0, 1.4, -18.8]} />
             </>
           )}
-
         </Canvas>
 
       </div>
